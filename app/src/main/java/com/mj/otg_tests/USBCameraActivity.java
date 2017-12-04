@@ -10,14 +10,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.jiangdg.S.FileUtils;
-
 import com.jiangdg.S.MCC;
-import com.serenegiant.usb.WCD;
 import com.serenegiant.usb.SI;
 import com.serenegiant.usb.UM;
+import com.serenegiant.usb.WCD;
 import com.serenegiant.usb.common.ACHS;
 import com.serenegiant.usb.encoder.WRP;
-import com.serenegiant.usb.widget.CameraViewInterface;
+import com.serenegiant.usb.widget.CVI;
 
 import java.util.List;
 
@@ -42,14 +41,14 @@ public class USBCameraActivity extends AppCompatActivity implements WCD.CameraDi
     public Button mBtnUpdateResultion;
     @BindView(R.id.btn_restart_camera)
     Button mBtnRestartCamera;
-//    @BindView(R.id.btn_contrast)
-//    Button mBtnContrast;
-//    @BindView(R.id.btn_brightness)
-//    Button mBtnBrightness;
+    @BindView(R.id.btn_contrast)
+    Button mBtnContrast;
+    @BindView(R.id.btn_brightness)
+    Button mBtnBrightness;
 
     private MCC muvaaH;
 
-    private CameraViewInterface mUVCCameraView;
+    private CVI mUVCCameraView;
 
     private boolean isRequest;
     private boolean isPreview;
@@ -108,10 +107,10 @@ public class USBCameraActivity extends AppCompatActivity implements WCD.CameraDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usbcamera);
         ButterKnife.bind(this);
-        mUVCCameraView = (CameraViewInterface) mTextureView;
-        mUVCCameraView.setCallback(new CameraViewInterface.Callback() {
+        mUVCCameraView = (CVI) mTextureView;
+        mUVCCameraView.setCallback(new CVI.Callback() {
             @Override
-            public void onSurfaceCreated(CameraViewInterface view, Surface surface) {
+            public void onSurfaceCreated(CVI view, Surface surface) {
                 if(!isPreview && muvaaH.isCameraOpened()) {
                     muvaaH.startPreview(mUVCCameraView, new ACHS.OnPreViewResultListener() {
                         @Override
@@ -124,12 +123,12 @@ public class USBCameraActivity extends AppCompatActivity implements WCD.CameraDi
             }
 
             @Override
-            public void onSurfaceChanged(CameraViewInterface view, Surface surface, int width, int height) {
+            public void onSurfaceChanged(CVI view, Surface surface, int width, int height) {
 
             }
 
             @Override
-            public void onSurfaceDestroy(CameraViewInterface view, Surface surface) {
+            public void onSurfaceDestroy(CVI view, Surface surface) {
                 if(isPreview && muvaaH.isCameraOpened()) {
                     muvaaH.stopPreview();
                     isPreview = false;
@@ -163,24 +162,24 @@ public class USBCameraActivity extends AppCompatActivity implements WCD.CameraDi
         mUVCCameraView.onPause();
     }
 
-    @OnClick({  R.id.btn_capture_pic, R.id.btn_rec_video,R.id.btn_update_resolution,R.id.btn_restart_camera})
+    @OnClick({ R.id.btn_contrast,R.id.btn_brightness,R.id.btn_capture_pic, R.id.btn_rec_video,R.id.btn_update_resolution,R.id.btn_restart_camera})
     public void onViewClick(View view) {
         int vId = view.getId();
         switch (vId) {
             // 对比度
-//            case R.id.btn_contrast:
-//                if(muvaaH == null || !muvaaH.isCameraOpened())
-//                    return;
-//                int contrast = muvaaH.getModelValue(MCC.MODE_CONTRAST);
-//                muvaaH.setModelValue(MCC.MODE_CONTRAST,contrast++);
-//                break;
-//            // 亮度
-//            case R.id.btn_brightness:
-//                if(muvaaH == null || !muvaaH.isCameraOpened())
-//                    return;
-//                int brightness = muvaaH.getModelValue(MCC.MODE_BRIGHTNESS);
-//                muvaaH.setModelValue(MCC.MODE_BRIGHTNESS,brightness++);
-//                break;
+            case R.id.btn_contrast:
+                if(muvaaH == null || !muvaaH.isCameraOpened())
+                    return;
+                int contrast = muvaaH.getModelValue(MCC.MODE_CONTRAST);
+                muvaaH.setModelValue(MCC.MODE_CONTRAST,contrast++);
+                break;
+            // 亮度
+            case R.id.btn_brightness:
+                if(muvaaH == null || !muvaaH.isCameraOpened())
+                    return;
+                int brightness = muvaaH.getModelValue(MCC.MODE_BRIGHTNESS);
+                muvaaH.setModelValue(MCC.MODE_BRIGHTNESS,brightness++);
+                break;
             // 重启Camera
             case R.id.btn_restart_camera:
 
